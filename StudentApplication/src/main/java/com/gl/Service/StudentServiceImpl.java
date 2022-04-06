@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
@@ -30,7 +31,9 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public void createOrUpdate(StudentModel sm)
 	{
+		Transaction tx = session.beginTransaction();
 		session.saveOrUpdate(sm);
+		tx.commit();
 	}
 	
 	@Transactional
@@ -55,6 +58,7 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public StudentModel readById(int id)
 	{
+
 		StudentModel s = session.get(StudentModel.class,id);
 		
 		return s;
@@ -63,9 +67,11 @@ public class StudentServiceImpl implements StudentService {
 	@Transactional
 	public void deleteById(int id)
 	{
+		Transaction tx = session.beginTransaction();
 		StudentModel sm = session.get(StudentModel.class, id);
 		
 		session.delete(sm);
+		tx.commit();
 	}
 	
 }
